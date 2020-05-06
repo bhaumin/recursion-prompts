@@ -44,17 +44,44 @@ var arraySum = function(array) {
 
 // 4. Check if a number is even.
 var isEven = function(n) {
+  if (n === 0) {
+    return true;
+  }
+
+  if (Math.abs(n) === 1) {
+    return false;
+  }
+
+  return isEven(Math.abs(n) - 2);
 };
 
 // 5. Sum all integers below a given integer.
 // sumBelow(10); // 45
 // sumBelow(7); // 21
 var sumBelow = function(n) {
+  const sign = n / Math.abs(n);
+
+  if (n === 0 || Math.abs(n) === 1) {
+    return 0;
+  } else if (Math.abs(n) === 2) {
+    return 1 * sign;
+  }
+
+  return (n - (sign * 1)) + sumBelow(n - (sign * 1));
 };
 
 // 6. Get the integers within a range (x, y).
 // range(2,9); // [3,4,5,6,7,8]
 var range = function(x, y) {
+  const rangeOrder = x <= y ? 1 : -1;
+
+  if (Math.abs(y - x) <= 1) {
+    return [];
+  } else if (Math.abs(y - x) === 2) {
+    return [x + rangeOrder];
+  }
+
+  return [x + rangeOrder, ...range(x + rangeOrder, y - rangeOrder), y - rangeOrder];
 };
 
 // 7. Compute the exponent of a number.
