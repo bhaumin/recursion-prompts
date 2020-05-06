@@ -64,10 +64,10 @@ var sumBelow = function(n) {
   if (n === 0 || Math.abs(n) === 1) {
     return 0;
   } else if (Math.abs(n) === 2) {
-    return 1 * sign;
+    return sign;
   }
 
-  return (n - (sign * 1)) + sumBelow(n - (sign * 1));
+  return (n - sign) + sumBelow(n - sign);
 };
 
 // 6. Get the integers within a range (x, y).
@@ -90,6 +90,20 @@ var range = function(x, y) {
 // exponent(4,3); // 64
 // https://www.khanacademy.org/computing/computer-science/algorithms/recursive-algorithms/a/computing-powers-of-a-number
 var exponent = function(base, exp) {
+  if (exp === 0) {
+    return 1;
+  }
+
+  if (exp === 1) {
+    return base;
+  }
+
+  if (exp < 0) {
+    return 1 / exponent(base, -exp);
+  }
+
+  const result = exponent(base, parseInt(exp / 2));
+  return (exp % 2 === 0) ? result * result : result * result * base;
 };
 
 // 8. Determine if a number is a power of two.
