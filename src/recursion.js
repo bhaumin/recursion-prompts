@@ -466,11 +466,35 @@ var nestedEvenSum = function(obj) {
 // 30. Flatten an array containing nested arrays.
 // flatten([1,[2],[3,[[4]]],5]); // [1,2,3,4,5]
 var flatten = function(array) {
+  const flatArr = [];
+
+  for (let item of array) {
+    if (Array.isArray(item)) {
+      flatArr.push(...flatten(item));
+    } else {
+      flatArr.push(item);
+    }
+  }
+
+  return flatArr;
 };
 
 // 31. Given a string, return an object containing tallies of each letter.
 // letterTally('potato'); // {p:1, o:2, t:2, a:1}
 var letterTally = function(str, obj) {
+  if (str.length === 0) {
+    return {};
+  }
+
+  obj = letterTally(str.slice(1), obj);
+
+  if (obj.hasOwnProperty(str[0])) {
+    obj[str[0]]++;
+  } else {
+    obj[str[0]] = 1;
+  }
+
+  return obj;
 };
 
 // 32. Eliminate consecutive duplicates in a list. If the list contains repeated
@@ -479,18 +503,48 @@ var letterTally = function(str, obj) {
 // compress([1,2,2,3,4,4,5,5,5]) // [1,2,3,4,5]
 // compress([1,2,2,3,4,4,2,5,5,5,4,4]) // [1,2,3,4,2,5,4]
 var compress = function(list) {
+  if (list.length === 0) {
+    return [];
+  }
+
+  const result = compress(list.slice(0, -1));
+
+  if (result.length === 0 || result[result.length - 1] !== list[list.length - 1]) {
+    result.push(list[list.length - 1]);
+  }
+
+  return result;
 };
 
 // 33. Augment every element in a list with a new value where each element is an array
 // itself.
 // augmentElements([[],[3],[7]], 5); // [[5],[3,5],[7,5]]
 var augmentElements = function(array, aug) {
+  if (array.length === 0) {
+    return [];
+  }
+
+  const lastElem = array[array.length - 1].concat(aug);
+  const result = augmentElements(array.slice(0, -1), aug)
+  result.push(lastElem);
+  return result;
 };
 
 // 34. Reduce a series of zeroes to a single 0.
 // minimizeZeroes([2,0,0,0,1,4]) // [2,0,1,4]
 // minimizeZeroes([2,0,0,0,1,0,0,4]) // [2,0,1,0,4]
 var minimizeZeroes = function(array) {
+  if (array.length === 0) {
+    return [];
+  }
+
+  const result = minimizeZeroes(array.slice(0, -1));
+
+  if (result.length === 0 || result[result.length - 1] !== 0 || result[result.length - 1] !== array[array.length - 1]) {
+    result.push(array[array.length - 1]);
+  }
+
+  return result;
 };
 
 // 35. Alternate the numbers in an array between positive and negative regardless of
@@ -498,12 +552,61 @@ var minimizeZeroes = function(array) {
 // alternateSign([2,7,8,3,1,4]) // [2,-7,8,-3,1,-4]
 // alternateSign([-2,-7,8,3,-1,4]) // [2,-7,8,-3,1,-4]
 var alternateSign = function(array) {
+  if (array.length === 0) {
+    return [];
+  } else if (array.length === 1) {
+    return [ array[0] < 0 ? -1 * array[0] : array[0] ];
+  }
+
+  const result = alternateSign(array.slice(0, -1));
+
+  if (result.length > 0) {
+    if (result[result.length - 1] < 0) {
+      result.push(array[array.length - 1] < 0 ? (-1 * array[array.length - 1]) : array[array.length - 1]);
+    } else {
+      result.push(array[array.length - 1] < 0 ? array[array.length - 1] : (-1 * array[array.length - 1]));
+    }
+  }
+
+  return result;
 };
 
 // 36. Given a string, return a string with digits converted to their word equivalent.
 // Assume all numbers are single digits (less than 10).
 // numToText("I have 5 dogs and 6 ponies"); // "I have five dogs and six ponies"
 var numToText = function(str) {
+  if (str.length === 0) {
+    return '';
+  }
+
+  if (str.length === 1) {
+    switch (str[0]) {
+      case '0':
+        return 'zero';
+      case '1':
+        return 'one';
+      case '2':
+        return 'two';
+      case '3':
+        return 'three';
+      case '4':
+        return 'four';
+      case '5':
+        return 'five';
+      case '6':
+        return 'six';
+      case '7':
+        return 'seven';
+      case '8':
+        return 'eight';
+      case '9':
+        return 'nine';
+      default:
+        return str;
+    }
+  }
+
+  return numToText(str[0]) + numToText(str.slice(1));
 };
 
 
